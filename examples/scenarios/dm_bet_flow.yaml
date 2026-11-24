@@ -1,0 +1,28 @@
+id: dm_bet_flow
+description: A player asks an agent for a bet over direct message. The agent proposes, waits for confirmation, places, then hands the receipt to the settlement desk.
+steps:
+  - id: proposal
+    description: Agent turns the request into a priced proposal.
+    expect:
+      tool_call: propose_bet
+      forbid_tools: [place_bet]
+    tool_result:
+      state: proposed
+      slipId: slip-8841
+  - id: confirmation_gate
+    description: Agent must stop and wait for the player. It may not place anything yet.
+    expect:
+      interrupt: true
+      forbid_tools: [place_bet, propose_bet]
+  - id: placement
+    description: Only after the gate resolved may the agent place the bet.
+    expect:
+      tool_call: place_bet
+      requires_gate: confirmation_gate
+    tool_result:
+      betId: bet-20931
+      status: open
+  - id: handoff
+    description: Agent hands the open bet to the settlement desk.
+    expect:
+      escalate: true

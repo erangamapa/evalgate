@@ -1,0 +1,36 @@
+{
+  "scenario": "dm_bet_flow",
+  "steps": [
+    {
+      "id": "proposal",
+      "events": [
+        {"type": "message", "text": "Two units on Kestrel Athletic to win at 2.10. Confirm?"},
+        {
+          "type": "tool_call",
+          "name": "propose_bet",
+          "arguments": {"selectionId": "sel-77", "stake": "20.00"},
+          "result": {"state": "proposed", "slipId": "slip-8841"}
+        }
+      ]
+    },
+    {
+      "id": "confirmation_gate",
+      "events": [{"type": "interrupt", "text": "waiting for player confirmation"}]
+    },
+    {
+      "id": "placement",
+      "events": [
+        {
+          "type": "tool_call",
+          "name": "place_bet",
+          "arguments": {"slipId": "slip-8841"},
+          "result": {"betId": "bet-20931", "status": "open"}
+        }
+      ]
+    },
+    {
+      "id": "handoff",
+      "events": [{"type": "escalation", "name": "settlement_desk"}]
+    }
+  ]
+}
