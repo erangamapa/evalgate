@@ -32,12 +32,10 @@ The committed calibration sample is synthetic demo data with invented players an
 
 ## Running it
 
-L1 validates tool call arguments against the models in [sportsbook-contracts](https://github.com/erangamapa/sportsbook-contracts), so clone it next to this repo first.
+L1 validates tool call arguments against the models in [sportsbook-contracts](https://github.com/erangamapa/sportsbook-contracts), which pip installs from git as a dependency.
 
 ```
-git clone https://github.com/erangamapa/sportsbook-contracts ../sportsbook-contracts
 python3.11 -m venv .venv
-.venv/bin/pip install -e ../sportsbook-contracts/packages/py
 .venv/bin/pip install -e '.[dev]'
 .venv/bin/pytest
 .venv/bin/python -m evalgate run \
