@@ -1,0 +1,27 @@
+{
+  "dataset_sha256": "946eede6e262f6a76b8d42d9f214a6e61ea090996dde58e0b510f9a7ad3cab25",
+  "metrics": {
+    "certainty": {
+      "f1": 0.9444,
+      "precision": 0.9333,
+      "recall": 0.9649
+    },
+    "entity": {
+      "f1": 0.9667,
+      "precision": 0.9667,
+      "recall": 0.9667
+    },
+    "event_type": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "market_direction": {
+      "f1": 0.8347,
+      "precision": 0.9236,
+      "recall": 0.803
+    }
+  },
+  "rows": 30,
+  "task": "tweet-classifier"
+}
