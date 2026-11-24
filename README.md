@@ -1,6 +1,6 @@
 # evalgate
 
-I run this as the release gate for the nondeterministic parts of the platform. Unit and integration tests do that job for deterministic code. For models, prompts and adapters I need something else. A model change is a release. It runs a pyramid of checks, cheapest first, and a regression blocks the merge.
+A release gate for LLM systems. Unit and integration tests do that job for deterministic code. For models, prompts and adapters you need something else. A model change is a release. I run it as the gate for the nondeterministic parts of a sportsbook platform, which is the worked example throughout. It runs a pyramid of checks, cheapest first, and a regression blocks the merge.
 
 ## The pyramid
 
@@ -32,7 +32,10 @@ The committed calibration sample is synthetic demo data with invented players an
 
 ## Running it
 
+L1 validates tool call arguments against the models in [sportsbook-contracts](https://github.com/erangamapa/sportsbook-contracts), so clone it next to this repo first.
+
 ```
+git clone https://github.com/erangamapa/sportsbook-contracts ../sportsbook-contracts
 python3.11 -m venv .venv
 .venv/bin/pip install -e ../sportsbook-contracts/packages/py
 .venv/bin/pip install -e '.[dev]'
