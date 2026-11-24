@@ -90,7 +90,7 @@ jobs:
           candidate-ref: ${{ github.event.pull_request.head.sha }}
 ```
 
-model-foundry calls it on every adapter change. The `artifacts-dir` input says where each ref keeps its predictions and transcripts.
+model-foundry does not call it from CI yet. The `artifacts-dir` input says where each ref keeps its predictions and transcripts.
 
 ## Layer policy
 
