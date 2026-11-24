@@ -1,0 +1,56 @@
+name: evalgate
+description: Run the evalgate pyramid for a model, prompt or adapter change and fail the job on a regression.
+inputs:
+  config:
+    description: Path to evalgate.yaml inside the repository, relative to its root.
+    required: true
+  baseline-ref:
+    description: Git ref holding the baseline artifacts.
+    required: true
+  candidate-ref:
+    description: Git ref holding the candidate artifacts.
+    required: true
+  artifacts-dir:
+    description: Directory in each ref that holds predictions, transcripts and baseline metrics.
+    required: false
+    default: evalgate
+  contracts-spec:
+    description: pip requirement for the sportsbook-contracts python package.
+    required: false
+    default: sportsbook-contracts @ git+https://github.com/erangamapa/sportsbook-contracts.git#subdirectory=packages/py
+runs:
+  using: composite
+  steps:
+    - name: Check out the candidate
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.candidate-ref }}
+        path: evalgate-candidate
+    - name: Check out the baseline
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.baseline-ref }}
+        path: evalgate-baseline
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install evalgate
+      shell: bash
+      run: |
+        pip install "${{ inputs.contracts-spec }}"
+        pip install "${{ github.action_path }}/.."
+    - name: Run the gate
+      shell: bash
+      working-directory: evalgate-candidate
+      run: |
+        python -m evalgate run \
+          --config "${{ inputs.config }}" \
+          --baseline-dir "../evalgate-baseline/${{ inputs.artifacts-dir }}" \
+          --candidate-dir "${{ inputs.artifacts-dir }}"
+    - name: Upload the report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: evalgate-report
+        path: evalgate-candidate/${{ inputs.artifacts-dir }}/report
+        if-no-files-found: warn
